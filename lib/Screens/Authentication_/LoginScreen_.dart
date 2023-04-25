@@ -12,9 +12,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-
-
-
+// SubClass
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
