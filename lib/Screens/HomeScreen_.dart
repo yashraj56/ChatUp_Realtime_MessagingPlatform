@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -17,7 +19,10 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async{
+          await FirebaseAuth.instance.signOut();
+          await GoogleSignIn().signOut();
+        },
         child: const Icon(Icons.add),
       ),
       body: Container(
@@ -44,14 +49,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0,right: 20.0,top: 30.0),
+              padding:
+                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
               child: SizedBox(
                 height: 39.0,
                 child: TextField(
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search_outlined),
                     filled: true,
-                    fillColor: Colors.grey[200], // Change the background color here
+                    fillColor: Colors.grey[200],
+                    // Change the background color here
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: BorderSide.none,
@@ -61,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
+
           ],
         ),
       ),

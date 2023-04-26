@@ -1,8 +1,9 @@
+import 'dart:io';
 import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:minorproject/Helper/Dialogs_.dart';
 import 'package:minorproject/Screens/HomeScreen_.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,31 +17,65 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+    // Google Authentication
+    Future<UserCredential?> _signInWithGoogle() async {
+      try {
+        //Wait and try to take errors
+        await InternetAddress.lookup('Google.com');
+        // Trigger the authentication flow
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+        // Obtain the auth details from the request
+        final GoogleSignInAuthentication? googleAuth =
+            await googleUser?.authentication;
+
+        // Create a new credential
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
+
+        // Once signed in, return the UserCredential
+        return await FirebaseAuth.instance.signInWithCredential(credential);
+      } catch (e) {
+        // log('\n_signInWithGoogle: $e' as num);
+        Dialogs.showSnackbar(context, 'Check Internet!, or Slow connectivity');
+        return null;
+      }
+    }
+
     // handles google login button click
     // ignore: no_leading_underscores_for_local_identifiers
     _handleGoogleBtnClick() {
+      // For showing progress bar
+      Dialogs.showProgressBar(context);
+      /*---------------------------------------*/
       _signInWithGoogle().then((user) {
-        log('\nUser: ${user.user}' as num);
-        log('\nUserAdditionalInfo: ${user.additionalUserInfo}' as num);
-
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const MyHomePage()));
+        // For hiding progress bar
+        Navigator.pop(context);
+        if (user != null) {
+          log('\nUser: ${user.user}' as num);
+          log('\nUserAdditionalInfo: ${user.additionalUserInfo}' as num);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => const MyHomePage()));
+        }
       });
     }
+
     return Scaffold(
       // Main Body
-       body: Center(
+      body: Center(
         child: Column(
           children: [
             Container(
               margin: const EdgeInsets.only(top: 400),
               child:
-              const Image(image: AssetImage('Assets/Images/AppIcon.png')),
+                  const Image(image: AssetImage('Assets/Images/AppIcon.png')),
             ),
             Container(
               margin: const EdgeInsets.only(top: 10),
               child:
-              const Image(image: AssetImage('Assets/Images/Logo_Text.png')),
+                  const Image(image: AssetImage('Assets/Images/Logo_Text.png')),
             ),
             Container(
               margin: const EdgeInsets.only(top: 60),
@@ -115,23 +150,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-}
-
-
-Future<UserCredential> _signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth =
-  await googleUser?.authentication;
-
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
-
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithCredential(credential);
 }
