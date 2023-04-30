@@ -4,7 +4,9 @@ import 'package:minorproject/Screens/HomeScreen_.dart';
 import 'package:minorproject/Screens/Splash_.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'dart:developer';
 
+late Size mq;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }

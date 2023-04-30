@@ -13,4 +13,5 @@ Color hexToColor(String hex) {
 
 class ColorConstants {
   static Color mainAppColour = hexToColor('#E2725B');
+  static Color chatUserCardColor = hexToColor('#FBFBFB');
 }

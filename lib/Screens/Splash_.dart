@@ -1,5 +1,6 @@
 //splash screen
 import 'package:flutter/material.dart';
+import 'package:minorproject/API/_Apis.dart';
 import 'package:minorproject/Screens/Authentication_/LoginScreen_.dart';
 import 'package:minorproject/Screens/HomeScreen_.dart';
 
@@ -15,10 +16,15 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 1500), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      if (APIs.auth.currentUser != null) {
+        //navigate to home screen
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => const MyHomePage()));
+      } else {
+        //navigate to login screen
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+      }
     });
   }
 

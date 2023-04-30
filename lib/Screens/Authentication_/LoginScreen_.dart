@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:minorproject/API/_Apis.dart';
 import 'package:minorproject/Helper/Dialogs_.dart';
 import 'package:minorproject/Screens/HomeScreen_.dart';
 
@@ -18,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     // Google Authentication
+    // ignore: no_leading_underscores_for_local_identifiers
     Future<UserCredential?> _signInWithGoogle() async {
       try {
         //Wait and try to take errors
@@ -36,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         // Once signed in, return the UserCredential
-        return await FirebaseAuth.instance.signInWithCredential(credential);
+        return await APIs.auth.signInWithCredential(credential);
       } catch (e) {
         // log('\n_signInWithGoogle: $e' as num);
         Dialogs.showSnackbar(context, 'Check Internet!, or Slow connectivity');
@@ -54,8 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
         // For hiding progress bar
         Navigator.pop(context);
         if (user != null) {
-          log('\nUser: ${user.user}' as num);
-          log('\nUserAdditionalInfo: ${user.additionalUserInfo}' as num);
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (_) => const MyHomePage()));
         }
