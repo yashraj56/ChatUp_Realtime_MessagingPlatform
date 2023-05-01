@@ -43,6 +43,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                   ),
                 ),
                 title: Text(
+                  //Fetching data from database
                   widget.user.name,
                   style: const TextStyle(
                     fontSize: 19,
