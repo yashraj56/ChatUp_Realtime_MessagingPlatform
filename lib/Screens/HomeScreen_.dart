@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:minorproject/API/_Apis.dart';
 import 'package:minorproject/Constants/Colors_.dart';
+import 'package:minorproject/Models/Chat_user.dart';
 import 'package:minorproject/Screens/Authentication_/LoginScreen_.dart';
 import 'package:minorproject/Widgets/Chat_user_card.dart';
 import 'package:minorproject/main.dart';
@@ -19,6 +20,8 @@ FirebaseAuth auth = FirebaseAuth.instance;
 Future _signOut() async {
   await FirebaseAuth.instance.signOut();
 }
+
+List<ChatUser> list = [];
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
@@ -81,13 +84,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 15,
-                  itemBuilder: (context, index) {
-                    return const ChatUserCard();
-                  })
+              StreamBuilder(
+                stream: APIs.firestore.collection('users').snapshots(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    //if data is loading
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                      return const Center(child: CircularProgressIndicator());
+
+                    //if some or all data is loaded then show it
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      final data = snapshot.data?.docs;
+
+                      list = data
+                              ?.map((e) => ChatUser.fromJson(e.data()))
+                              .toList() ??
+                          [];
+
+                      if (list.isNotEmpty) {
+                        return ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: list.length,
+                            itemBuilder: (context, index) {
+                              return ChatUserCard(user: list[index]);
+                            });
+                      } else {
+                        return const Center(child: Text('No Connection found'));
+                      }
+                  }
+                },
+              ),
             ],
           ),
         ),

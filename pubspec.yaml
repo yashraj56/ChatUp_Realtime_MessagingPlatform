@@ -35,6 +35,10 @@ dependencies:
   firebase_auth: ^4.4.2
 # For handling google sign-in
   google_sign_in: ^6.1.0
+#  For accesing cloud firestore database
+  cloud_firestore: ^4.5.3
+
+
   flutter:
     sdk: flutter
 
