@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:minorproject/API/_Apis.dart';
 import 'package:minorproject/Constants/Colors_.dart';
 import 'package:minorproject/Models/Chat_user.dart';
+import 'package:minorproject/ProfileScreen_.dart';
 import 'package:minorproject/Screens/Authentication_/LoginScreen_.dart';
 import 'package:minorproject/Widgets/Chat_user_card.dart';
 import 'package:minorproject/main.dart';
@@ -25,6 +26,13 @@ List<ChatUser> list = [];
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    APIs.getSelfinfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -41,25 +49,36 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
-          physics: ScrollPhysics(),
+          physics: const ScrollPhysics(),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 25.0, right: 25.0),
                 child: Row(
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       "Inbox",
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Spacer(),
-                    Icon(
-                      Icons.settings_suggest_rounded,
-                      size: 35,
-                    )
+                    const Spacer(),
+                    IconButton(
+                        iconSize: 50,
+                        color: Colors.black,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ProfileScreen(
+                                        user: APIs.me,
+                                      )));
+                        },
+                        icon: const Icon(
+                          Icons.settings_suggest_rounded,
+                          size: 35,
+                        ))
                   ],
                 ),
               ),
@@ -85,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               StreamBuilder(
-                stream: APIs.firestore.collection('users').snapshots(),
+                stream: APIs.getAllusers(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     //if data is loading

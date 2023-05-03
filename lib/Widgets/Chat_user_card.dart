@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minorproject/Constants/Colors_.dart';
@@ -30,15 +31,21 @@ class _ChatUserCardState extends State<ChatUserCard> {
             onTap: () {},
             child: Center(
               child: ListTile(
-                leading: const Padding(
-                  padding: EdgeInsets.only(right: 8.0),
-                  child: CircleAvatar(
-                    minRadius: 22,
-                    maxRadius: 22,
-                    backgroundColor: Color.fromARGB(255, 226, 114, 96),
-                    child: Icon(
-                      CupertinoIcons.person_alt,
-                      color: Colors.white,
+                leading: CachedNetworkImage(
+                  width: 50,
+                  height: 50,
+                  imageUrl: widget.user.image,
+                  // placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: CircleAvatar(
+                      minRadius: 22,
+                      maxRadius: 22,
+                      backgroundColor: Color.fromARGB(255, 226, 114, 96),
+                      child: Icon(
+                        CupertinoIcons.person_alt,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

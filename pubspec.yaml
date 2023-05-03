@@ -37,7 +37,8 @@ dependencies:
   google_sign_in: ^6.1.0
 #  For accesing cloud firestore database
   cloud_firestore: ^4.5.3
-
+#  Cached network image
+  cached_network_image: ^3.2.3
 
   flutter:
     sdk: flutter
