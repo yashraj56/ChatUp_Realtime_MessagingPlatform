@@ -15,13 +15,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    /* Pre Calling (initstate) while running SplashScreen class */
+    Future.delayed(const Duration(milliseconds: 1500),
+        /* Wait and check conditions */ () {
       if (APIs.auth.currentUser != null) {
-        //navigate to home screen
+        /* User already exist (=!null) */
+        // Navigate to home screen
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const MyHomePage()));
       } else {
-        //navigate to login screen
+        /* New user (APIs.auth.currentUser==null) */
+        // Navigate to login screen
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const LoginScreen()));
       }

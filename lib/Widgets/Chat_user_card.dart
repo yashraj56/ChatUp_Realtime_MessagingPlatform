@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minorproject/Constants/Colors_.dart';
 import 'package:minorproject/Models/Chat_user.dart';
-import 'package:minorproject/main.dart';
+
+import '../Screens/ChatScreen_.dart';
 
 class ChatUserCard extends StatefulWidget {
   final ChatUser user;
@@ -28,23 +29,29 @@ class _ChatUserCardState extends State<ChatUserCard> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              // Navigator.push(context, MaterialPageRoute(builder: (_)=> ChatScreen(user:widget.user)));
+            },
             child: Center(
               child: ListTile(
-                leading: CachedNetworkImage(
-                  width: 50,
-                  height: 50,
-                  imageUrl: widget.user.image,
-                  // placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: CircleAvatar(
-                      minRadius: 22,
-                      maxRadius: 22,
-                      backgroundColor: Color.fromARGB(255, 226, 114, 96),
-                      child: Icon(
-                        CupertinoIcons.person_alt,
-                        color: Colors.white,
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: CachedNetworkImage(
+                    width: 55,
+                    height: 55,
+                    fit: BoxFit.fill,
+                    imageUrl: widget.user.image,
+                    // placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: CircleAvatar(
+                        minRadius: 22,
+                        maxRadius: 22,
+                        backgroundColor: Color.fromARGB(255, 226, 114, 96),
+                        child: Icon(
+                          CupertinoIcons.person_alt,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),

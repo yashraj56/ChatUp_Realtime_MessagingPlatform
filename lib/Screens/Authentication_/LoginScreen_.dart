@@ -25,11 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
         await InternetAddress.lookup('Google.com');
         // Trigger the authentication flow
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
         // Obtain the auth details from the request
         final GoogleSignInAuthentication? googleAuth =
             await googleUser?.authentication;
-
         // Create a new credential
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
@@ -55,10 +53,12 @@ class _LoginScreenState extends State<LoginScreen> {
         // For hiding progress bar
         Navigator.pop(context);
         if (user != null) {
+          /* If user is available */
           if ((await APIs.userExist())) {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (_) => const MyHomePage()));
           } else {
+            /* If user is not available */
             await APIs.createUser().then((value) {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (_) => const MyHomePage()));
@@ -81,8 +81,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 10),
-                child:
-                    const Image(image: AssetImage('Assets/Images/Logo_Text.png')),
+                child: const Image(
+                    image: AssetImage('Assets/Images/Logo_Text.png')),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 60),
@@ -114,7 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 20),
-                child: const Image(image: AssetImage('Assets/Images/3dot_.png')),
+                child:
+                    const Image(image: AssetImage('Assets/Images/3dot_.png')),
               ),
               GestureDetector(
                 onTap: () {

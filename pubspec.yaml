@@ -39,6 +39,10 @@ dependencies:
   cloud_firestore: ^4.5.3
 #  Cached network image
   cached_network_image: ^3.2.3
+#Image picking
+  image_picker: ^0.8.7+4
+#Fire base storage
+  firebase_storage: ^11.1.2
 
   flutter:
     sdk: flutter
