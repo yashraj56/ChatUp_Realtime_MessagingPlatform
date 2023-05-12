@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:minorproject/Models/Chat_user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:minorproject/Models/Message.dart';
 
 class APIs {
   // Getter method (To get user details)
@@ -32,17 +33,21 @@ class APIs {
         .collection('users')
         .doc(user.uid)
         .get()
-        .then((user) async => {
-              if (user.exists)
-                {me = ChatUser.fromJson(user.data()!)}
-              else
-                {await createUser().then((value) => getSelfinfo())}
-            });
+        .then((user) async =>
+    {
+      if (user.exists)
+        {me = ChatUser.fromJson(user.data()!)}
+      else
+        {await createUser().then((value) => getSelfinfo())}
+    });
   }
 
 // For creating a new user
   static Future<void> createUser() async {
-    final time = DateTime.now().millisecondsSinceEpoch.toString();
+    final time = DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString();
     final chatUser = ChatUser(
         id: user.uid,
         name: user.displayName.toString(),
@@ -70,7 +75,9 @@ class APIs {
 // Update profile picture
   static Future<void> updateProfilePicture(File file) async {
     // Getting image file extension
-    final ext = file.path.split('.').last;
+    final ext = file.path
+        .split('.')
+        .last;
     // Storage file reference with path
     final ref = storage.ref().child('profile_pictures/${user.uid}.$ext');
     // Uploading image
@@ -86,7 +93,34 @@ class APIs {
   }
 
 // ********** User messages related APIs **********
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
-    return firestore.collection('messages').snapshots();
+
+  static String getConversationID(String id) =>
+      user.uid.hashCode <= id.hashCode
+          ? '${user.uid}_$id'
+          : '${id}_${user.uid}';
+
+  //For getting all messages of a specific conversation from FSDB
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
+      ChatUser user) {
+    return firestore
+        .collection('chats/${getConversationID(user.id)}/messages/')
+        .snapshots();
+  }
+
+  // For sending message
+  static Future<void> sendMessage(ChatUser chatUser, String msg) async {
+    final time = DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString();
+    final Message message = Message(toId: chatUser.id,
+        msg: msg,
+        read: '',
+        type: Type.text,
+        fromId: user.uid,
+        sent: time);
+    final ref =
+    firestore.collection('chats/${getConversationID(chatUser.id)}/messages/');
+    await ref.doc().set(message.toJson());
   }
 }
