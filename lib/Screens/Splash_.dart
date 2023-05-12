@@ -1,5 +1,6 @@
 //splash screen
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:minorproject/API/_Apis.dart';
 import 'package:minorproject/Screens/Authentication_/LoginScreen_.dart';
 import 'package:minorproject/Screens/HomeScreen_.dart';
@@ -16,8 +17,13 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     /* Pre Calling (initstate) while running SplashScreen class */
-    Future.delayed(const Duration(milliseconds: 1500),
-        /* Wait and check conditions */ () {
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      //exit full-screen
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.white,
+          statusBarColor: Colors.white));
+      /* Wait and check conditions */
       if (APIs.auth.currentUser != null) {
         /* User already exist (=!null) */
         // Navigate to home screen

@@ -77,11 +77,16 @@ class APIs {
     await ref
         .putFile(file, SettableMetadata(contentType: 'image/$ext'))
         .then((p0) {});
-    // Updating image in firestor storage
+    // Updating image in firestore storage
     me.image = await ref.getDownloadURL();
     await firestore
         .collection('users')
         .doc(user.uid)
         .update({'image': me.name});
+  }
+
+// ********** User messages related APIs **********
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
+    return firestore.collection('messages').snapshots();
   }
 }

@@ -30,7 +30,15 @@ class _ChatUserCardState extends State<ChatUserCard> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: InkWell(
             onTap: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (_)=> ChatScreen(user:widget.user)));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChatScreen(
+                    // Navigating to blank screen
+                    user: widget.user,
+                  ),
+                ),
+              );
             },
             child: Center(
               child: ListTile(
